@@ -46,6 +46,8 @@ SHARED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "banklist_api",
 ]
 
 TENANT_APPS = [
@@ -55,6 +57,8 @@ TENANT_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "hr_dashboard",
+    "employees",
 ]
 
 INSTALLED_APPS = list(SHARED_APPS) + [
@@ -64,6 +68,7 @@ INSTALLED_APPS = list(SHARED_APPS) + [
 TENANT_MODEL = "companies.Client"
 
 TENANT_DOMAIN_MODEL = "companies.Domain"
+
 
 MIDDLEWARE = [
     "django_tenants.middleware.main.TenantMainMiddleware",

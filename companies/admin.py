@@ -11,6 +11,7 @@ def create_client_superuser(modeladmin, request, queryset):
         with schema_context(client.schema_name):
             # Check if superuser exists for this tenant
             if User.objects.filter(is_superuser=True).exists():
+                # Display error message
                 messages.error(
                     request, f"Client {client.name} already has a superuser."
                 )
