@@ -8,5 +8,6 @@ class ClientForm(forms.ModelForm):
         model = Client
         fields = [
             "name",
+            "email",
             "schema_name",
         ]
