@@ -34,7 +34,12 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+"""Django_tenant package is used here to serve multiple clients. A subdomain will be given to each 
+cleint. each subdomain will still be able to access same models created while still maintaning there data"""
+
+SHARED_APPS = [
+    "django_tenants",
+    "companies",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -43,7 +48,25 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
+TENANT_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+]
+
+INSTALLED_APPS = list(SHARED_APPS) + [
+    app for app in TENANT_APPS if app not in SHARED_APPS
+]
+
+TENANT_MODEL = "companies.Client"
+
+TENANT_DOMAIN_MODEL = "companies.Domain"
+
 MIDDLEWARE = [
+    "django_tenants.middleware.main.TenantMainMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -53,7 +76,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
 ROOT_URLCONF = "effexa_pay.urls"
+PUBLIC_SCHEMA_URLCONF = "effexa_pay.urls_public"
 
 TEMPLATES = [
     {
@@ -86,7 +111,7 @@ WSGI_APPLICATION = "effexa_pay.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django_tenants.postgresql_backend",
         "NAME": env.str("DBNAME"),
         "USER": env.str("DBUSER"),
         "PASSWORD": env.str("DBPASSWORD"),
@@ -94,6 +119,8 @@ DATABASES = {
         "PORT": env.int("DBPORT"),
     }
 }
+
+DATABASE_ROUTERS = ("django_tenants.routers.TenantSyncRouter",)
 
 
 # Password validation
@@ -136,3 +163,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+SHOW_PUBLIC_IF_NO_TENANT_FOUND = True
