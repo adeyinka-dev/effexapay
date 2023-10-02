@@ -69,6 +69,7 @@ TENANT_MODEL = "companies.Client"
 
 TENANT_DOMAIN_MODEL = "companies.Domain"
 
+AUTH_USER_MODEL = "employees.Employee"
 
 MIDDLEWARE = [
     "django_tenants.middleware.main.TenantMainMiddleware",
